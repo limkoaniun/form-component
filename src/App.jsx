@@ -1,6 +1,64 @@
 import './App.css';
 import { useState } from 'react';
 
+const isRequired = (fieldName) => {
+  return (value) => {
+    if (!value.trim()) {
+      return `${fieldName} is required`;
+    }
+    return null;
+  };
+};
+
+const isBetween = (fieldName, min, max) => {
+  return (value) => {
+    if (value.length < min || value.length > max) {
+      return `${fieldName} should be between ${min} and ${max} characters`;
+    }
+    return null;
+  };
+};
+
+const isEmail = (fieldName) => {
+  return (value) => {
+    if (!/\S+@\S+\.\S+/.test(value)) {
+      return `${fieldName} is invalid`;
+    }
+    return null;
+  };
+};
+
+// for rendering JSX form
+const fields = [
+  {
+    name: 'firstName',
+    label: 'First Name',
+    type: 'text',
+    validators: (label) => [isRequired(label), isBetween(label, 2, 10)],
+  },
+  {
+    name: 'lastName',
+    label: 'Last Name',
+    type: 'text',
+    validators: (label) => [isRequired(label), isBetween(label, 2, 10)],
+  },
+  {
+    name: 'username',
+    label: 'Username',
+    type: 'text',
+    validators: (label) => [isRequired(label), isBetween(label, 2, 10)],
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    validators: (label) => [isRequired(label), isBetween(label, 2, 10)],
+  },
+  { name: 'email', label: 'Email', type: 'email', validators: (label) => [isRequired(label), isEmail(label)] },
+];
+
+const fieldValidators = Object.fromEntries(fields.map((field) => [field.name, field.validators(field.label)]));
+
 function App() {
   const [form, setForm] = useState({
     firstName: '',
@@ -13,6 +71,30 @@ function App() {
   const [errors, setErrors] = useState({});
   const [isValidated, setIsValidated] = useState(false);
 
+  const validateField = (fieldName, value) => {
+    const validators = fieldValidators[fieldName];
+
+    for (const validator of validators) {
+      const error = validator(value);
+      if (error) {
+        return error;
+      }
+    }
+    return null;
+  };
+
+  const validateForm = (form) => {
+    const nextErrors = {};
+
+    for (const key in form) {
+      const error = validateField(key, form[key]);
+      if (error) {
+        nextErrors[key] = error;
+      }
+    }
+    return nextErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -20,84 +102,20 @@ function App() {
       ...prevState,
       [name]: value,
     }));
-  };
 
-  const validateFirstName = (firstName) => {
-    if (!firstName) {
-      return 'First name is required';
-    }
-    if (firstName.length < 2 || firstName.length > 10) {
-      return 'First name should be between 2 and 10 characters';
-    }
-    return null;
-  };
+    const error = validateField(name, value);
 
-  const validateLastName = (lastName) => {
-    if (!lastName) {
-      return 'Last name is required';
-    }
-    if (lastName.length < 2 || lastName.length > 10) {
-      return 'Last name should be between 2 and 10 characters';
-    }
-    return null;
-  };
+    setErrors((prevState) => {
+      const nextErrors = { ...prevState };
 
-  const validateUsername = (username) => {
-    if (!username) {
-      return 'Username is required';
-    }
-    if (username.length < 8 || username.length > 20) {
-      return 'Username should be between 8 and 20 characters';
-    }
-    return null;
-  };
+      if (error) {
+        nextErrors[name] = error;
+      } else {
+        delete nextErrors[name];
+      }
 
-  const validatePassword = (password) => {
-    if (!password) {
-      return 'Password is required';
-    }
-    if (password.length < 8 || password.length > 20) {
-      return 'Password should be between 8 and 20 characters';
-    }
-    return null;
-  };
-
-  const validateEmail = (email) => {
-    if (!email) {
-      return 'Email is required';
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      return 'Email is invalid';
-    }
-    return null;
-  };
-
-  const validateForm = (form) => {
-    const errors = {};
-
-    const firstNameError = validateFirstName(form.firstName);
-    const lastNameError = validateLastName(form.lastName);
-    const usernameError = validateUsername(form.username);
-    const passwordError = validatePassword(form.password);
-    const emailError = validateEmail(form.email);
-
-    if (firstNameError) {
-      errors.firstName = firstNameError;
-    }
-    if (lastNameError) {
-      errors.lastName = lastNameError;
-    }
-    if (usernameError) {
-      errors.username = usernameError;
-    }
-    if (passwordError) {
-      errors.password = passwordError;
-    }
-    if (emailError) {
-      errors.email = emailError;
-    }
-
-    return errors;
+      return nextErrors;
+    });
   };
 
   const handleSubmit = (e) => {
@@ -107,11 +125,11 @@ function App() {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setIsValidated(false);
-    } else {
-      setErrors({});
-      setIsValidated(true);
-      console.log('Form submitted:', form);
+      return;
     }
+    setErrors({});
+    setIsValidated(true);
+    console.log('Form submitted:', form);
   };
 
   return (
@@ -121,31 +139,20 @@ function App() {
         {isValidated && <h4 style={{ color: 'green', textAlign: 'center' }}>Form submitted successfully!</h4>}
 
         <div>
-          <div>
-            <label htmlFor='firstName'>First Name </label>
-            <input type='text' name='firstName' value={form.firstName} onChange={handleChange} />
-            {errors.firstName && <p style={{ color: 'red' }}>{errors.firstName}</p>}
-          </div>
-          <div>
-            <label htmlFor='lastName'>Last Name </label>
-            <input type='text' name='lastName' value={form.lastName} onChange={handleChange} />
-            {errors.lastName && <p style={{ color: 'red' }}>{errors.lastName}</p>}
-          </div>
-          <div>
-            <label htmlFor='username'>Username </label>
-            <input type='text' name='username' value={form.username} onChange={handleChange} />
-            {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
-          </div>
-          <div>
-            <label htmlFor='password'>Password </label>
-            <input type='password' name='password' value={form.password} onChange={handleChange} />
-            {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-          </div>
-          <div>
-            <label htmlFor='email'>Email </label>
-            <input type='email' name='email' value={form.email} onChange={handleChange} />
-            {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-          </div>
+          {fields.map((field) => (
+            <div key={field.name}>
+              <label htmlFor={field.name}>{field.label}</label>
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                value={form[field.name]}
+                onChange={handleChange}
+                style={{ border: errors[field.name] ? '1px solid red' : '1px solid #ccc' }}
+              />
+              {errors[field.name] && <p style={{ color: 'red' }}>{errors[field.name]}</p>}
+            </div>
+          ))}
           <div>
             <button
               type='submit'
