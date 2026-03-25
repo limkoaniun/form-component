@@ -1,66 +1,66 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
 }
 
 form {
-    width: 400px;
-    margin: 60px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  margin: 60px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 form > div {
-    display: table;
-    width: 100%;
+  display: table;
+  width: 100%;
 }
 
 form > div > div {
-    display: table-row;
+  display: table-row;
 }
 
 label {
-    display: table-cell;
-    padding: 10px 10px 10px 0;
-    font-weight: bold;
-    width: 120px;
+  display: table-cell;
+  padding: 10px 10px 10px 0;
+  font-weight: bold;
+  width: 120px;
 }
 
 input {
-    display: table-cell;
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  display: table-cell;
+  padding: 8px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 /* turn the last row into a normal block */
 form > div > div:last-child {
-    display: table-caption;
-    caption-side: bottom;
-    text-align: center;
-    margin-top: 20px;
+  display: table-caption;
+  caption-side: bottom;
+  text-align: center;
+  margin-top: 20px;
 }
 
 button {
-    width: 150px;
-    padding: 10px 20px;
-    border: none;
-    color: white;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
+  width: 150px;
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 p {
-    color: red;
-    margin: 4px 0 0;
-    font-size: 14px;
+  color: red;
+  margin: 4px 0 0;
+  font-size: 14px;
 }
