@@ -74,11 +74,29 @@ function App() {
 
   const validateForm = (form) => {
     const errors = {};
-    errors.firstName = validateFirstName(form.firstName);
-    errors.lastName = validateLastName(form.lastName);
-    errors.username = validateUsername(form.username);
-    errors.password = validatePassword(form.password);
-    errors.email = validateEmail(form.email);
+
+    const firstNameError = validateFirstName(form.firstName);
+    const lastNameError = validateLastName(form.lastName);
+    const usernameError = validateUsername(form.username);
+    const passwordError = validatePassword(form.password);
+    const emailError = validateEmail(form.email);
+
+    if (firstNameError) {
+      errors.firstName = firstNameError;
+    }
+    if (lastNameError) {
+      errors.lastName = lastNameError;
+    }
+    if (usernameError) {
+      errors.username = usernameError;
+    }
+    if (passwordError) {
+      errors.password = passwordError;
+    }
+    if (emailError) {
+      errors.email = emailError;
+    }
+
     return errors;
   };
 
