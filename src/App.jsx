@@ -22,51 +22,63 @@ function App() {
     }));
   };
 
+  const validateFirstName = (firstName) => {
+    if (!firstName) {
+      return 'First name is required';
+    }
+    if (firstName.length < 2 || firstName.length > 10) {
+      return 'First name should be between 2 and 10 characters';
+    }
+    return null;
+  };
+
+  const validateLastName = (lastName) => {
+    if (!lastName) {
+      return 'Last name is required';
+    }
+    if (lastName.length < 2 || lastName.length > 10) {
+      return 'Last name should be between 2 and 10 characters';
+    }
+    return null;
+  };
+
+  const validateUsername = (username) => {
+    if (!username) {
+      return 'Username is required';
+    }
+    if (username.length < 8 || username.length > 20) {
+      return 'Username should be between 8 and 20 characters';
+    }
+    return null;
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return 'Password is required';
+    }
+    if (password.length < 8 || password.length > 20) {
+      return 'Password should be between 8 and 20 characters';
+    }
+    return null;
+  };
+
+  const validateEmail = (email) => {
+    if (!email) {
+      return 'Email is required';
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return 'Email is invalid';
+    }
+    return null;
+  };
+
   const validateForm = (form) => {
     const errors = {};
-
-    // validation logic
-    if (!form.firstName) {
-      errors.firstName = 'First name is required';
-    }
-    if (form.firstName.length < 2 || form.firstName.length > 10) {
-      errors.firstName = 'First name should be between 2 and 10 characters';
-    }
-    if (!form.lastName) {
-      errors.lastName = 'Last name is required';
-    }
-    if (form.lastName.length < 2 || form.lastName.length > 10) {
-      errors.lastName = 'Last name should be between 2 and 10 characters';
-    }
-    if (!form.username) {
-      errors.username = 'Username is required';
-    }
-    if (form.username.length < 8 || form.username.length > 20) {
-      errors.username = 'Username should be between 8 and 20 characters';
-    }
-    if (!form.password) {
-      errors.password = 'You must provide a password';
-    }
-    if (
-      form.password.length < 8 ||
-      !/[A-Z]/.test(form.password) ||
-      !/[a-z]/.test(form.password) ||
-      !/\d/.test(form.password) ||
-      !/[!@#$%^&*(),.?":{}|<>]/.test(form.password)
-    ) {
-      errors.password =
-        'Password must be at least 8 characters long and ' +
-        'contain at least one uppercase letter, ' +
-        'one lowercase letter, one number, and ' +
-        'one special character';
-    }
-    if (!form.email) {
-      errors.email = 'Email is required';
-    }
-    if (!/\S+@\S+\.\S+/.test(form.email)) {
-      errors.email = 'Email is invalid';
-    }
-
+    errors.firstName = validateFirstName(form.firstName);
+    errors.lastName = validateLastName(form.lastName);
+    errors.username = validateUsername(form.username);
+    errors.password = validatePassword(form.password);
+    errors.email = validateEmail(form.email);
     return errors;
   };
 
