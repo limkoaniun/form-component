@@ -1,16 +1,52 @@
-# React + Vite
+# Form Component
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React learning project for building reusable form components with custom hooks and composable validation.
 
-Currently, two official plugins are available:
+## What I Learned
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Declarative configuration**
+  - instead of writing each input by hand, the `fields` array in `App.jsx` defines form fields as data, and React renders them with `.map()`. Adding a new field is just adding an object to the array.
+- **Custom hooks**
+  - extracted form state, validation, and submission logic from `App.jsx` into `useFormHook.js`, making it reusable across different forms.
+- **Composable validation**
+  - `isRequired`, `isBetween`, and `isEmail` are small validator functions in `utils.js` that can be mixed and matched per field. Each returns `null` if valid or an error string if not.
+- **Controlled components**
+  - every `<input>` is controlled by React state (`value` + `onChange`), which enables real-time validation on every keystroke.
+- **Curried functions**
+  - validators like `isRequired(label)(value)` return a new function, so the field name is "baked in" once and the validator can be reused across fields.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- Vite 8
+- ESLint 9 (flat config) + Prettier + Stylelint
+- Husky + lint-staged (pre-commit hooks)
+- commitlint (conventional commits)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+## Available Scripts
+
+| Command            | Description               |
+| ------------------ | ------------------------- |
+| `npm run dev`      | Start development server  |
+| `npm run build`    | Build for production      |
+| `npm run lint`     | Run ESLint                |
+| `npm run format`   | Format code with Prettier |
+| `npm run lint:css` | Run Stylelint on CSS      |
+
+## Project Structure
+
+```
+src/
+  App.jsx          - Registration form component with declarative field config
+  useFormHook.js   - Custom hook for form state, validation, and submission
+  utils.js         - Composable validator functions (isRequired, isBetween, isEmail)
+  App.css          - Form styling
+  main.jsx         - React entry point
+```
