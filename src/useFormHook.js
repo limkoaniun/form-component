@@ -4,7 +4,6 @@ export default function useFormHook({ fields }) {
   const fieldValidators = Object.fromEntries(fields.map((field) => [field.name, field.validators(field.label)]));
 
   const [form, setForm] = useState(Object.fromEntries(fields.map((field) => [field.name, ''])));
-
   const [errors, setErrors] = useState({});
   const [isValidated, setIsValidated] = useState(false);
 

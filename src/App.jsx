@@ -3,6 +3,8 @@ import './App.css';
 import { isBetween, isEmail, isRequired } from './utils';
 import useFormHook from './useFormHook.js';
 
+// Todo: create order.jsx and it uses useFormHook
+
 function App() {
   // for rendering JSX form
   const fields = [
@@ -37,6 +39,7 @@ function App() {
 
   return (
     <>
+      {/* Todo: extract form to a separate component*/}
       <form onSubmit={handleSubmit}>
         <h1>Registration Form</h1>
         {isValidated && <h4 style={{ color: 'green', textAlign: 'center' }}>Form submitted successfully!</h4>}
